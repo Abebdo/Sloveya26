@@ -1,80 +1,86 @@
-# Solveya — AI Scam Detection Platform
+# Solveya Cyber-Physical Diagnostic Engine
 
-![Solveya Banner](https://via.placeholder.com/1200x600/0a0f1c/00f0ff?text=Solveya+AI+Security)
+**Lead Architect:** JULES
+**Version:** 0.1.0
+**Classification:** Critical AI Infrastructure
 
-> **Solveya** is a next-generation cyber-security platform that uses advanced AI (Llama 3.1) running on the edge to detect scams, phishing attempts, and social engineering in text messages.
+## Overview
 
-## 🚀 Features
+Solveya is a multi-layered cyber-physical diagnostic platform capable of ingesting binary telemetry streams, performing multi-modal anomaly detection (Shannon Entropy, Isolation Forest, LOF), and presenting real-time diagnostic intelligence through a reactive command interface.
 
-*   **Deep AI Analysis**: Uses Llama 3.1 to understand context, intent, and psychological triggers.
-*   **Risk Heatmap**: Visually highlights dangerous phrases and linguistic manipulation.
-*   **Real-time Scoring**: Provides a 0-100 risk score and categorical assessment (Safe, Phishing, Investment Scam, etc.).
-*   **Safe Rewrite**: Automatically generates a neutralized or "honest" version of the scam message.
-*   **Privacy First**: All analysis happens on stateless Cloudflare Workers. No data is permanently stored.
-*   **Modern UI**: Futuristic "Glass-morphism" design with smooth animations and responsive layout.
+## Architecture
 
-## 🛠 Tech Stack
+The system implements a strict four-tier architecture:
 
-*   **Frontend**: React 18, Vite, TypeScript
-*   **Styling**: Tailwind CSS, Framer Motion
-*   **Icons**: Lucide React
-*   **Backend / AI**: Cloudflare Pages, Cloudflare Workers AI (`@cf/meta/llama-3.1-8b-instruct`)
-*   **Deployment**: Cloudflare Pages
+- **Tier 4: Presentation Layer** (React 18, TypeScript, Recharts, WebSocket)
+- **Tier 3: API Gateway Layer** (FastAPI, Pydantic, OpenAPI)
+- **Tier 2: Service Orchestration Layer** (Asyncio Pipeline, Circuit Breakers)
+- **Tier 1: Core Engine Layer** (Entropy Calculation, Binary Parsing, Scikit-Learn Wrappers)
 
-## 📂 Project Structure
+## Prerequisites
 
-```
-/
-├── functions/              # Cloudflare Pages Functions (Backend)
-│   └── api/
-│       └── analyze.ts      # Main AI Analysis Endpoint
-├── src/
-│   ├── components/         # Reusable UI Components
-│   │   ├── analyzer/       # Core Analysis Widgets (Heatmap, RiskMeter)
-│   │   ├── common/         # Atomic Components (Button, Card, Badge)
-│   │   └── layout/         # Layout Wrappers (Navbar, Footer)
-│   ├── hooks/              # Custom React Hooks (useAnalyze)
-│   ├── lib/                # Utilities & API Clients
-│   │   ├── analyzer-service.ts # API Client & Mock Engine
-│   │   └── types.ts        # TypeScript Interfaces
-│   ├── pages/              # Application Pages (Home, About, Pricing, etc.)
-│   └── styles/             # Global Styles
-└── wrangler.toml           # Cloudflare Configuration
-```
+- Docker & Docker Compose
+- **OR** Python 3.11+ and Node.js 20+
 
-## 💻 Local Development
+## Quick Start (Docker)
 
-1.  **Install Dependencies**
-    ```bash
-    npm install
-    ```
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/internal/solveya.git
+   cd solveya
+   ```
 
-2.  **Start Development Server**
-    ```bash
-    npm run dev
-    ```
+2. **Launch the stack:**
+   ```bash
+   docker-compose up
+   ```
 
-    > **Note:** In local development (without `wrangler`), the app automatically falls back to a **Mock Engine**. This simulates the AI response using advanced heuristics, allowing you to test the UI and flows without a live Cloudflare connection.
+3. **Access the platform:**
+   - **Dashboard:** [http://localhost:5173](http://localhost:5173)
+   - **API Docs:** [http://localhost:8000/api/docs](http://localhost:8000/api/docs)
 
-3.  **Build for Production**
-    ```bash
-    npm run build
-    ```
+## Manual Setup
 
-## ☁️ Deployment
+### Backend
 
-This project is optimized for **Cloudflare Pages**.
+1. Create a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Start the server:
+   ```bash
+   uvicorn solveya.api.main:app --reload
+   ```
 
-1.  **Push to GitHub**
-2.  **Connect to Cloudflare Pages**
-3.  **Configure Build Settings**:
-    *   **Framework Preset**: Vite
-    *   **Build Command**: `npm run build`
-    *   **Output Directory**: `dist`
-4.  **Bind AI Model**:
-    *   Go to your Pages project settings -> Functions -> AI.
-    *   Add a binding named `AI`.
+### Frontend
 
-## 📜 License
+1. Navigate to frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the dev server:
+   ```bash
+   npm run dev
+   ```
+   **Note:** Ensure `index.html` and `src/index.css` are present if not generated by default scaffolding.
 
-MIT License.
+## API Endpoints
+
+- `POST /api/v1/diagnostics`: Submit a binary file for analysis.
+- `GET /api/v1/diagnostics/{job_id}`: Retrieve analysis results.
+- `POST /api/v1/anomalies/detect`: Synchronous anomaly detection.
+- `GET /api/v1/health`: System health and telemetry.
+- `WS /api/v1/telemetry/ws`: Real-time system metrics.
+
+## License
+
+Proprietary and Confidential.
